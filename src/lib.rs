@@ -1,5 +1,5 @@
 use wasm_bindgen::prelude::*;
-use image::{DynamicImage, ImageFormat, ImageOutputFormat};
+use image::ImageOutputFormat;
 use std::io::Cursor;
 
 #[wasm_bindgen]
@@ -15,7 +15,7 @@ pub fn process_image(
         .map_err(|e| JsValue::from_str(&format!("Failed to load image: {}", e)))?;
 
     // Resize if width/height are provided (0 means original)
-    let mut processed_img = if width > 0 && height > 0 {
+    let processed_img = if width > 0 && height > 0 {
         img.resize_exact(width, height, image::imageops::FilterType::Lanczos3)
     } else if width > 0 {
         img.resize(width, u32::MAX, image::imageops::FilterType::Lanczos3)
@@ -51,7 +51,7 @@ pub fn add_watermark(
     let watermark = image::load_from_memory(watermark_image)
         .map_err(|e| JsValue::from_str(&format!("Failed to load watermark image: {}", e)))?;
 
-    image::imageops::overlay(&mut img, &watermark, x, y);
+    image::imageops::overlay(&mut img, &watermark, x as i64, y as i64);
 
     let mut result = Cursor::new(Vec::new());
     img.write_to(&mut result, ImageOutputFormat::Jpeg(90))
