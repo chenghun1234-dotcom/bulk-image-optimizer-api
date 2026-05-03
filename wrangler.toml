@@ -1,0 +1,11 @@
+name = "bulk-image-optimizer-api"
+main = "src/index.js"
+compatibility_date = "2024-01-01"
+
+[vars]
+ENVIRONMENT = "production"
+
+[[rules]]
+type = "CompiledWasm"
+handlers = ["WASM_MODULE"]
+globs = ["src/optimizer_bg.wasm"]
