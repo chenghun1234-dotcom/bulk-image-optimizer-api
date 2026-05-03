@@ -88,5 +88,50 @@
     <footer>
         <p>&copy; 2024 PrivacyScrub. Targeted Solutions for the Modern Wanghong Market.</p>
     </footer>
+
+    <script>
+        document.querySelector('.btn-large').addEventListener('click', async () => {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = 'image/*';
+            input.onchange = async (e) => {
+                const file = e.target.files[0];
+                if (!file) return;
+
+                const formData = new FormData();
+                formData.append('image', file);
+                formData.append('format', 'webp');
+                formData.append('quality', '80');
+
+                const btn = document.querySelector('.btn-large');
+                const originalText = btn.innerText;
+                btn.innerText = 'Processing...';
+
+                try {
+                    const resp = await fetch('/api/optimize', {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    if (resp.ok) {
+                        const blob = await resp.blob();
+                        const url = URL.createObjectURL(blob);
+                        const a = document.createElement('a');
+                        a.href = url;
+                        a.download = `optimized_${file.name.split('.')[0]}.webp`;
+                        a.click();
+                        alert('Success! EXIF stripped and image optimized. Check your downloads.');
+                    } else {
+                        alert('Error: ' + await resp.text());
+                    }
+                } catch (err) {
+                    alert('Error: ' + err.message);
+                } finally {
+                    btn.innerText = originalText;
+                }
+            };
+            input.click();
+        });
+    </script>
 </body>
 </html>

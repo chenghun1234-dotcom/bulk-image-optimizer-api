@@ -4,3 +4,5 @@
 /pkg
 .env
 /dist
+src/*.wasm
+src/optimizer_wasm.js
