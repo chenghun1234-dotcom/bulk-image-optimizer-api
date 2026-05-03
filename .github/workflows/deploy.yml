@@ -5,6 +5,9 @@ on:
     branches:
       - main
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -20,13 +23,20 @@ jobs:
         run: curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
 
       - name: Build Wasm
-        run: wasm-pack build --target web
+        run: wasm-pack build --target web --release
 
       - name: Prepare Worker
         run: |
           mkdir -p src
-          cp pkg/optimizer_bg.wasm src/optimizer_bg.wasm
-          cp pkg/optimizer.js src/optimizer_wasm.js
+          if [ -f "pkg/optimizer_bg.wasm" ]; then
+            cp pkg/optimizer_bg.wasm src/optimizer_bg.wasm
+            cp pkg/optimizer.js src/optimizer_wasm.js
+            echo "✅ Wasm files copied to src/"
+          else
+            echo "❌ Wasm build artifacts not found in pkg/"
+            exit 1
+          fi
+          ls -l src/
 
       - name: Deploy to Cloudflare Workers
         uses: cloudflare/wrangler-action@v3
