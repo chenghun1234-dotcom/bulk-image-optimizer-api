@@ -1,5 +1,5 @@
-import WASM_MODULE from "./optimizer_bg.wasm";
-import init, { process_image, add_watermark } from "./optimizer.js";
+import WASM_MODULE from "../pkg/optimizer_bg.wasm";
+import init, { process_image, add_watermark } from "../pkg/optimizer.js";
 
 export default {
   async fetch(request, env, ctx) {
