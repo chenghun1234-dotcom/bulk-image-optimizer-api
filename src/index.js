@@ -121,7 +121,7 @@ const HTML_CONTENT = `<!DOCTYPE html>
                         const url = URL.createObjectURL(blob);
                         const a = document.createElement('a');
                         a.href = url;
-                        a.download = \`optimized_\${file.name.split('.')[0]}.webp\`;
+                        a.download = 'optimized_' + file.name.split('.')[0] + '.webp';
                         a.click();
                         alert('Success! EXIF stripped and image optimized. Check your downloads.');
                     } else {
