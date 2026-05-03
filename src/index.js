@@ -417,7 +417,7 @@ footer {
     text-align: center;
     color: var(--text-dim);
     border-top: 1px solid var(--glass-border);
-}
+`;
 
 const OPENAPI_CONTENT = `{
   "openapi": "3.0.0",
