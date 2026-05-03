@@ -137,7 +137,7 @@ const HTML_CONTENT = `<!DOCTYPE html>
         });
     </script>
 </body>
-</html>\`;
+</html>`;
 const CSS_CONTENT = `:root {
     --primary: #6366f1;
     --primary-hover: #4f46e5;
@@ -414,7 +414,7 @@ footer {
     color: var(--text-dim);
     border-top: 1px solid var(--glass-border);
 }
-\`;
+`;
 
 let wasmInitialized = false;
 
