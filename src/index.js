@@ -135,6 +135,10 @@ const HTML_CONTENT = `<!DOCTYPE html>
             };
             input.click();
         });
+
+        document.querySelector('.btn-secondary').addEventListener('click', () => {
+            window.location.href = '/openapi.json';
+        });
     </script>
 </body>
 </html>`;
@@ -414,7 +418,68 @@ footer {
     color: var(--text-dim);
     border-top: 1px solid var(--glass-border);
 }
-`;
+
+const OPENAPI_CONTENT = `{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Ultra-Fast Bulk Image Optimizer (Wasm Powered)",
+    "version": "1.0.0",
+    "description": "Zero-Cost, Zero-Privacy-Risk image processing for high-volume content creators (Wanghong). Strip EXIF, resize, and watermark thousands of images in seconds."
+  },
+  "servers": [
+    {
+      "url": "https://bulkimageoptimizerapi.chenghun1234.workers.dev"
+    }
+  ],
+  "paths": {
+    "/optimize": {
+      "post": {
+        "summary": "Strip EXIF and Optimize Image",
+        "description": "Removes all metadata (GPS, Device Info) and optimizes the image for web performance.",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "image": { "type": "string", "format": "binary" },
+                  "format": { "type": "string", "enum": ["jpg", "png", "webp"], "default": "jpg" },
+                  "width": { "type": "integer" },
+                  "height": { "type": "integer" },
+                  "quality": { "type": "integer", "default": 85 }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Processed image" }
+        }
+      }
+    },
+    "/watermark": {
+      "post": {
+        "summary": "Bulk Batch Watermarking",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "image": { "type": "string", "format": "binary" },
+                  "watermark": { "type": "string", "format": "binary" },
+                  "x": { "type": "integer", "default": 0 },
+                  "y": { "type": "integer", "default": 0 }
+                }
+              }
+            }
+          }
+        },
+        "responses": { "200": { "description": "Watermarked image" } }
+      }
+    }
+  }
+}`;
 
 let wasmInitialized = false;
 
@@ -439,6 +504,12 @@ export default {
         if (url.pathname === "/style.css") {
             return new Response(CSS_CONTENT, {
                 headers: { "Content-Type": "text/css" }
+            });
+        }
+
+        if (url.pathname === "/openapi.json") {
+            return new Response(OPENAPI_CONTENT, {
+                headers: { "Content-Type": "application/json" }
             });
         }
 
